@@ -11,12 +11,15 @@
 #import "NSData+Base64.h"
 #import <Growl/Growl.h>
 #import <Security/Security.h>
+#import <CommonCrypto/CommonDigest.h>
 
 #define REDMINE_URL_KEY @"redmineUrl"
 #define REDMINE_USERNAME_KEY @"redmineUsername"
 #define UPDATE_FREQUENCY_KEY @"updateFrequency"
 
 #define KEYCHAIN_SERVICE_NAME "Redminer Redmine Password"
+
+#define BASE_GRAVATAR_URL @"http://www.gravatar.com/avatar/"
 
 @implementation RedminerAppDelegate
 
@@ -113,6 +116,27 @@
 		[df setDateStyle:NSDateFormatterMediumStyle];
 		[df setTimeStyle:NSDateFormatterNoStyle];
 	}
+	//make sure we have a user info dict
+	if (!userInfoDict) {
+		userInfoDict = [[[NSMutableDictionary alloc] init] retain];
+	}
+	//check to make sure we have an author element to the issue directory, and ensure we don't have an existing entry in the userinfodict
+	if ([issue objectForKey:@"author"] && ![userInfoDict objectForKey:[[issue objectForKey:@"author"] objectForKey:@"id"]]) {
+		//get this person's info
+		NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@users/%i.json", [self baseUrl], [[[issue objectForKey:@"author"] objectForKey:@"id"] intValue] ] ];
+		NSLog(@"Fetching user info from: %@", [url absoluteString]);
+		NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+		NSError *error = nil;
+		NSURLResponse *response = nil;
+		NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+		NSString *jsonStr = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
+		//return [CCJSONParser objectFromJSON:jsonStr useNSNull:NO];
+		NSLog(@"User data returned: %@", jsonStr);
+		
+		//add this dictionary to our existing user dictionary
+		//stored using the userId as the key
+		[userInfoDict setObject:[[CCJSONParser objectFromJSON:jsonStr useNSNull:NO] objectForKey:@"user"] forKey:[[issue objectForKey:@"author"] objectForKey:@"id"]];
+	}
 	//setting the priority, and indirectly, the color of this item
 	[html appendFormat:@"<div class=\"issue priority-%@%@ %@\">", 
 		[[[issue objectForKey:@"priority"] objectForKey:@"name"] lowercaseString], 
@@ -120,7 +144,8 @@
 		[[[issue objectForKey:@"status"] objectForKey:@"name"] lowercaseString]];
 	[html appendFormat:@"<div class=\"project\">%@</div>", [[issue objectForKey:@"project"] objectForKey:@"name"]];
 	//for some reason the "#" link causes style.css to open.... weird
-	[html appendFormat:@"<div class=\"summary\"><a href=\"%@issues/%@\">%@</a> - <a href=\"#\" id=\"toggle_desc_%i\">Click me to toggle details!</a></div>", [self baseUrl], [issue objectForKey:@"id"], [issue objectForKey:@"subject"], [[issue objectForKey:@"id"] intValue] ];
+	//replace # link with 'javascript:void(0);', works fine now!
+	[html appendFormat:@"<div class=\"summary\"><a href=\"%@issues/%@\">%@</a></div> - <a href=\"javascript:void(0);\" id=\"toggle_desc_%i\">Click me to toggle details!</a>", [self baseUrl], [issue objectForKey:@"id"], [issue objectForKey:@"subject"], [[issue objectForKey:@"id"] intValue] ];
 	//show the due date if we have one
 	if ([issue objectForKey:@"due_date"]) {
 		[html appendFormat:@"<div class=\"due\">%@</div>", [df stringFromDate:[issue objectForKey:@"due_date"]]];
@@ -129,6 +154,17 @@
 	
 	//add some description stuff!
 	NSMutableString *descriptionText = [[NSMutableString alloc] init];
+	
+	//throw in some author info
+	if ([issue objectForKey:@"author"]){
+		[descriptionText appendFormat:@"<b>Created By:</b> <a href=\"%@users/%i\">%@</a><br/>", [self baseUrl], [[[issue objectForKey:@"author"] objectForKey:@"id"] intValue], [[issue objectForKey:@"author"] objectForKey:@"name"] ];
+		//see if we can insert the gravatar image!
+		if ([userInfoDict objectForKey:[[issue objectForKey:@"author"] objectForKey:@"id"]]) {
+			NSString *email = [[userInfoDict objectForKey:[[issue objectForKey:@"author"] objectForKey:@"id"]] objectForKey:@"mail"];
+			NSString *hash = [RedminerAppDelegate returnMD5Hash:email];
+			[descriptionText appendFormat:@"<img class=\"floatRightClear\" src=\"%@%@?s=30\" />", BASE_GRAVATAR_URL, hash];
+		}
+	}
 	if ([issue objectForKey:@"description"]) {
 		[descriptionText appendFormat:@"<b>Description:</b> %@<br/>", [issue objectForKey:@"description"]];
 	}
@@ -137,11 +173,30 @@
 		[descriptionText appendFormat:@"<b>Category:</b> %@", [[issue objectForKey:@"tracker"] objectForKey:@"name"]];
 	}
 	
+	//add progress bar
+	if ([issue objectForKey:@"done_ratio"]) {
+		[descriptionText appendFormat:@"<div class=\"meter-wrap\"><div class=\"meter-value\" style=\"background-color: #FF2200; width: %i%;\"><div class=\"meter-text\"><b>Progress</b></div></div></div>", [[issue objectForKey:@"done_ratio"] intValue] ];
+	}
+	
 	[html appendFormat:@"<div class=\"description\" id=\"desc_%i\">%@</div>", [[issue objectForKey:@"id"] intValue], descriptionText];
+	
 	
 	//add in the script that enables the toggling via jQuery
 	[html appendFormat:@"<script>$(\"#toggle_desc_%i\").click( function() { $('#desc_%i').toggle('slow'); } );</script>", [[issue objectForKey:@"id"] intValue], [[issue objectForKey:@"id"] intValue] ];
 }
+
+//generate md5 hash from string
++ (NSString *) returnMD5Hash:(NSString*)concat {
+    const char *concat_str = [concat UTF8String];
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    CC_MD5(concat_str, strlen(concat_str), result);
+    NSMutableString *hash = [NSMutableString string];
+    for (int i = 0; i < 16; i++)
+        [hash appendFormat:@"%02X", result[i]];
+    return [hash lowercaseString];
+	
+}
+
 
 - (void)userChanged:(id)sender {
 	NSLog(@"User changed.");
@@ -276,7 +331,7 @@
 	
 	
 	[self performSelectorOnMainThread:@selector(loadHtml:) withObject:html waitUntilDone:YES];
-	NSLog(@"HTML: %@", html);
+	//NSLog(@"HTML: %@", html);
 	[html release];
 	
 	[pool release];

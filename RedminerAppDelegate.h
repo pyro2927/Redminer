@@ -20,6 +20,8 @@
 	NSPopUpButton *updateFrequencyBtn;
 	NSButton *notifyWithGrowlBtn;
 	NSProgressIndicator *prefsIndicator;
+	
+	NSMutableDictionary *userInfoDict;
 }
 
 @property (assign) IBOutlet NSWindow *window;
@@ -35,5 +37,6 @@
 - (IBAction)showPreferences:(id)sender;
 - (IBAction)updateFrequencyChanged:(id)sender;
 - (IBAction)notifyWithGrowlChanged:(id)sender;
++ (NSString *) returnMD5Hash:(NSString*)concat;
 
 @end

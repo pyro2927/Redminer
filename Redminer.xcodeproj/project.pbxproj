@@ -13,6 +13,7 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		D8E54C0F1372EDFD00940FAF /* jquery.js in Sources */ = {isa = PBXBuildFile; fileRef = D8E54C0E1372EDFD00940FAF /* jquery.js */; };
+		D8E54DAA13732EF800940FAF /* meter-outline.png in Resources */ = {isa = PBXBuildFile; fileRef = D8E54DA913732EF800940FAF /* meter-outline.png */; };
 		EA5C033713394A9900D2E270 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA5C033613394A9900D2E270 /* WebKit.framework */; };
 		EA5C035713394EC600D2E270 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EA5C035613394EC600D2E270 /* NSData+Base64.m */; };
 		EA5C036213394ED500D2E270 /* CCJSONParser.m in Sources */ = {isa = PBXBuildFile; fileRef = EA5C035F13394ED500D2E270 /* CCJSONParser.m */; };
@@ -51,6 +52,7 @@
 		8D1107310486CEB800E47090 /* Redminer-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Redminer-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Redminer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Redminer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8E54C0E1372EDFD00940FAF /* jquery.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jquery.js; sourceTree = "<group>"; };
+		D8E54DA913732EF800940FAF /* meter-outline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "meter-outline.png"; sourceTree = "<group>"; };
 		EA5C033613394A9900D2E270 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		EA5C035513394EC600D2E270 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		EA5C035613394EC600D2E270 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D8E54DA913732EF800940FAF /* meter-outline.png */,
 				D8E54C0E1372EDFD00940FAF /* jquery.js */,
 				EA9A34E3134A18170087973F /* Icon.icns */,
 				EAB809DD1339A55E0073B347 /* style.css */,
@@ -248,6 +251,7 @@
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
 				EAB809DE1339A55E0073B347 /* style.css in Resources */,
 				EA9A34E4134A18170087973F /* Icon.icns in Resources */,
+				D8E54DAA13732EF800940FAF /* meter-outline.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

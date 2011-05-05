@@ -84,3 +84,35 @@ body {
 a {
 	color: #000;
 }
+
+img.floatRightClear { 
+    float: right; 
+    clear: right; 
+    margin: 4px; 
+}
+
+.meter-wrap{
+    position: relative;
+	margin-left: auto;
+    margin-right: auto;
+}
+
+.meter-wrap, .meter-value, .meter-text {
+    /* The width and height of your image */
+    width: 155px; height: 30px;
+}
+
+.meter-wrap, .meter-value {
+    background: #bdbdbd url('meter-outline.png') top left no-repeat;
+}
+            
+.meter-text {
+    position: absolute;
+    top:0; left:0;
+
+    padding-top: 5px;
+                
+    color: #fff;
+    text-align: center;
+    width: 100%;
+}
