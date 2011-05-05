@@ -113,19 +113,34 @@
 		[df setDateStyle:NSDateFormatterMediumStyle];
 		[df setTimeStyle:NSDateFormatterNoStyle];
 	}
+	//setting the priority, and indirectly, the color of this item
 	[html appendFormat:@"<div class=\"issue priority-%@%@ %@\">", 
 		[[[issue objectForKey:@"priority"] objectForKey:@"name"] lowercaseString], 
 		(overdue ? @" overdue" : @""), 
 		[[[issue objectForKey:@"status"] objectForKey:@"name"] lowercaseString]];
 	[html appendFormat:@"<div class=\"project\">%@</div>", [[issue objectForKey:@"project"] objectForKey:@"name"]];
-	[html appendFormat:@"<div class=\"summary\"><a href=\"%@issues/%@\">%@</a></div>", [self baseUrl], [issue objectForKey:@"id"], [issue objectForKey:@"subject"]];
+	//for some reason the "#" link causes style.css to open.... weird
+	[html appendFormat:@"<div class=\"summary\"><a href=\"%@issues/%@\">%@</a> - <a href=\"#\" id=\"toggle_desc_%i\">Click me to toggle details!</a></div>", [self baseUrl], [issue objectForKey:@"id"], [issue objectForKey:@"subject"], [[issue objectForKey:@"id"] intValue] ];
+	//show the due date if we have one
 	if ([issue objectForKey:@"due_date"]) {
 		[html appendFormat:@"<div class=\"due\">%@</div>", [df stringFromDate:[issue objectForKey:@"due_date"]]];
 	}
 	[html appendString:@"</div>"];
+	
+	//add some description stuff!
+	NSMutableString *descriptionText = [[NSMutableString alloc] init];
 	if ([issue objectForKey:@"description"]) {
-		[html appendFormat:@"<div id=\"toggle_desc_%i\" class=\"toggle\">Click me to toggle details!</div><div class=\"description\" id=\"desc_%i\">%@</div><script>$(\"#toggle_desc_%i\").click( function() { $('#desc_%i').toggle('slow'); } );</script>", [[issue objectForKey:@"id"] intValue], [[issue objectForKey:@"id"] intValue], [issue objectForKey:@"description"], [[issue objectForKey:@"id"] intValue], [[issue objectForKey:@"id"] intValue] ];
+		[descriptionText appendFormat:@"<b>Description:</b> %@<br/>", [issue objectForKey:@"description"]];
 	}
+	//see if we have a category
+	if ([issue objectForKey:@"tracker"]) {
+		[descriptionText appendFormat:@"<b>Category:</b> %@", [[issue objectForKey:@"tracker"] objectForKey:@"name"]];
+	}
+	
+	[html appendFormat:@"<div class=\"description\" id=\"desc_%i\">%@</div>", [[issue objectForKey:@"id"] intValue], descriptionText];
+	
+	//add in the script that enables the toggling via jQuery
+	[html appendFormat:@"<script>$(\"#toggle_desc_%i\").click( function() { $('#desc_%i').toggle('slow'); } );</script>", [[issue objectForKey:@"id"] intValue], [[issue objectForKey:@"id"] intValue] ];
 }
 
 - (void)userChanged:(id)sender {

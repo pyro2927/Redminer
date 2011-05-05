@@ -72,6 +72,13 @@ body {
 
 .description {
 	display: none;
+	background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0.0, rgb(100,149,237)),
+	    color-stop(1.0, rgb(255,255,255))
+	);
 }
 
 a {
