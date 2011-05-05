@@ -12,6 +12,7 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		D8E54C0F1372EDFD00940FAF /* jquery.js in Sources */ = {isa = PBXBuildFile; fileRef = D8E54C0E1372EDFD00940FAF /* jquery.js */; };
 		EA5C033713394A9900D2E270 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA5C033613394A9900D2E270 /* WebKit.framework */; };
 		EA5C035713394EC600D2E270 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EA5C035613394EC600D2E270 /* NSData+Base64.m */; };
 		EA5C036213394ED500D2E270 /* CCJSONParser.m in Sources */ = {isa = PBXBuildFile; fileRef = EA5C035F13394ED500D2E270 /* CCJSONParser.m */; };
@@ -49,6 +50,7 @@
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Redminer-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Redminer-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Redminer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Redminer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8E54C0E1372EDFD00940FAF /* jquery.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jquery.js; sourceTree = "<group>"; };
 		EA5C033613394A9900D2E270 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		EA5C035513394EC600D2E270 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		EA5C035613394EC600D2E270 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D8E54C0E1372EDFD00940FAF /* jquery.js */,
 				EA9A34E3134A18170087973F /* Icon.icns */,
 				EAB809DD1339A55E0073B347 /* style.css */,
 				8D1107310486CEB800E47090 /* Redminer-Info.plist */,
@@ -260,6 +263,7 @@
 				EA5C035713394EC600D2E270 /* NSData+Base64.m in Sources */,
 				EA5C036213394ED500D2E270 /* CCJSONParser.m in Sources */,
 				EA5C036313394ED500D2E270 /* CCJSONWriter.m in Sources */,
+				D8E54C0F1372EDFD00940FAF /* jquery.js in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

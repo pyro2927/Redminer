@@ -70,6 +70,10 @@ body {
 	color: #FFF;
 }
 
+.description {
+	display: none;
+}
+
 a {
 	color: #000;
 }

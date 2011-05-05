@@ -106,6 +106,7 @@
 }
 
 - (void)appendHtmlTo:(NSMutableString *)html forIssue:(NSDictionary *)issue isOverdue:(BOOL)overdue {
+	NSLog(@"Issue: %@", issue);
 	static NSDateFormatter *df;
 	if (!df) {
 		df = [[NSDateFormatter alloc] init];
@@ -122,6 +123,9 @@
 		[html appendFormat:@"<div class=\"due\">%@</div>", [df stringFromDate:[issue objectForKey:@"due_date"]]];
 	}
 	[html appendString:@"</div>"];
+	if ([issue objectForKey:@"description"]) {
+		[html appendFormat:@"<div id=\"toggle_desc_%i\" class=\"toggle\">Click me to toggle details!</div><div class=\"description\" id=\"desc_%i\">%@</div><script>$(\"#toggle_desc_%i\").click( function() { $('#desc_%i').toggle('slow'); } );</script>", [[issue objectForKey:@"id"] intValue], [[issue objectForKey:@"id"] intValue], [issue objectForKey:@"description"], [[issue objectForKey:@"id"] intValue], [[issue objectForKey:@"id"] intValue] ];
+	}
 }
 
 - (void)userChanged:(id)sender {
@@ -169,7 +173,7 @@
 		}
 	}
 	
-	[html appendString:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"/></head><body>"];
+	[html appendFormat:@"<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"/><script src=\"http://code.jquery.com/jquery-latest.js\"></script></head><body>"];
 	
 	int offset = 0;
 	NSMutableArray *assignedToMe = [NSMutableArray array];
@@ -257,6 +261,7 @@
 	
 	
 	[self performSelectorOnMainThread:@selector(loadHtml:) withObject:html waitUntilDone:YES];
+	NSLog(@"HTML: %@", html);
 	[html release];
 	
 	[pool release];
